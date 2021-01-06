@@ -38,6 +38,11 @@ type PensionFundsQuery = {
   getPensionFunds: Array<SelectItem>
 }
 
+export const ParentalLeaveConstants = {
+  minDays: 30,
+  maxDays: 540,
+}
+
 export const ParentalLeaveForm: Form = buildForm({
   id: 'ParentalLeaveDraft',
   title: 'Fæðingarorlof',
@@ -542,12 +547,14 @@ export const ParentalLeaveForm: Form = buildForm({
             buildCustomField(
               {
                 id: 'periods[0].endDate',
-                condition: (formValue) =>
-                  formValue.confirmLeaveDuration === 'duration',
+                condition: (formValue) => formValue.confirmLeaveDuration === 'duration',
                 title: mm.duration.title,
                 component: 'ParentalLeaveDuration',
               },
-              {},
+              {
+                minMonths: 1,
+                maxMonths: 18,
+              },
             ),
             buildMultiField({
               id: 'periods[0].ratio',
@@ -691,7 +698,6 @@ export const ParentalLeaveForm: Form = buildForm({
               id: 'submit',
               placement: 'footer',
               title: mm.confirmation.title,
-
               actions: [
                 {
                   event: 'SUBMIT',

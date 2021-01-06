@@ -3,14 +3,14 @@ import {
   FieldBaseProps,
   formatText,
   getValueViaPath,
+  ValidAnswers,
 } from '@island.is/application/core'
 import BoxChart, { BoxChartKey } from '../components/BoxChart'
 import { Box, Text } from '@island.is/island-ui/core'
 import { useLocale } from '@island.is/localization'
 import { RadioController } from '@island.is/shared/form-fields'
 import { m, mm } from '../../lib/messages'
-
-type ValidAnswers = 'yes' | 'no' | undefined
+import { allowance } from '../parentalLeaveUtils'
 
 const GiveRights: FC<FieldBaseProps> = ({ error, field, application }) => {
   const currentAnswer = getValueViaPath(
@@ -28,7 +28,7 @@ const GiveRights: FC<FieldBaseProps> = ({ error, field, application }) => {
     statefulAnswer === 'yes'
       ? [
           {
-            label: () => ({ ...m.yourRightsInMonths, values: { months: '5' } }),
+            label: () => ({ ...m.yourRightsInMonths, values: { months: allowance.min.toString() } }),
             bulletStyle: 'blue',
           },
           {
@@ -38,7 +38,7 @@ const GiveRights: FC<FieldBaseProps> = ({ error, field, application }) => {
         ]
       : [
           {
-            label: () => ({ ...m.yourRightsInMonths, values: { months: '6' } }),
+            label: () => ({ ...m.yourRightsInMonths, values: { months: allowance.default.toString() } }),
             bulletStyle: 'blue',
           },
         ]

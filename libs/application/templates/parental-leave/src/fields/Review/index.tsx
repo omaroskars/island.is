@@ -4,6 +4,7 @@ import {
   FieldBaseProps,
   getValueViaPath,
   Option,
+  ValidAnswers,
 } from '@island.is/application/core'
 import {
   Accordion,
@@ -37,7 +38,6 @@ import { YES, NO } from '../../constants'
 import useOtherParentOptions from '../../hooks/useOtherParentOptions'
 
 type ValidOtherParentAnswer = 'no' | 'manual' | undefined
-type ValidRadioAnswer = 'yes' | 'no' | undefined
 
 const Review: FC<FieldBaseProps> = ({
   application,
@@ -63,12 +63,12 @@ const Review: FC<FieldBaseProps> = ({
   )
 
   const [statefulPrivatePension, setStatefulPrivatePension] = useState<
-    ValidRadioAnswer
+    ValidAnswers
   >(
     getValueViaPath(
       application.answers,
       'usePrivatePensionFund',
-    ) as ValidRadioAnswer,
+    ) as ValidAnswers,
   )
 
   const dob = getExpectedDateOfBirth(application)
@@ -253,7 +253,7 @@ const Review: FC<FieldBaseProps> = ({
                       { label: formatMessage(m.noOptionLabel), value: NO },
                     ]}
                     onSelect={(s: string) => {
-                      setStatefulPrivatePension(s as ValidRadioAnswer)
+                      setStatefulPrivatePension(s as ValidAnswers)
                     }}
                   />
                 </GridColumn>

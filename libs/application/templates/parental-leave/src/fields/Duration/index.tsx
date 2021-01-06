@@ -14,17 +14,21 @@ import { theme } from '@island.is/island-ui/theme'
 import { FieldDescription } from '@island.is/shared/form-fields'
 import Slider from '../components/Slider'
 import * as styles from './Duration.treat'
-import { getExpectedDateOfBirth } from '../parentalLeaveUtils'
+import { getAvailableRights, getExpectedDateOfBirth } from '../parentalLeaveUtils'
 import { m, mm } from '../../lib/messages'
 import { useLocale } from '@island.is/localization'
 
 const ParentalLeaveUsage: FC<FieldBaseProps> = ({ field, application }) => {
-  const { id } = field
+  const { id, props: { minMonths, maxMonths } } = field
+  // console.log('-props', minMonths);
   const { clearErrors } = useFormContext()
   const { formatMessage } = useLocale()
   const { answers } = application
+  // console.log('-application', application);
   const expectedDateOfBirth = getExpectedDateOfBirth(application)
+  // console.log('-field', field);
   const currentRepeaterIndex = extractRepeaterIndexFromField(field)
+  // console.log('-currentRepeaterIndex', currentRepeaterIndex);
   const currentStartDateAnswer = getValueViaPath(
     answers,
     `periods[${
@@ -37,20 +41,16 @@ const ParentalLeaveUsage: FC<FieldBaseProps> = ({ field, application }) => {
     id,
     formatISO(addMonths(parseISO(currentStartDateAnswer), 1)),
   ) as string
-
   const monthsToUse = differenceInMonths(
     parseISO(currentEndDateAnswer),
     parseISO(currentStartDateAnswer),
   )
-
   const [chosenEndDate, setChosenEndDate] = useState<string>(
     currentEndDateAnswer,
   )
   const [chosenDuration, setChosenDuration] = useState<number>(monthsToUse)
   const [percent, setPercent] = useState<number>(100)
-  const minMonths = 1
-  const rightsLeft = 6 // TODO calculate from application
-  const maxMonths = 18
+  const rightsLeft = getAvailableRights(application)
 
   useEffect(() => {
     if (chosenDuration > rightsLeft) {

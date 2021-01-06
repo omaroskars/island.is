@@ -4,6 +4,7 @@ import { Box, Text } from '@island.is/island-ui/core'
 import { Application, getValueViaPath } from '@island.is/application/core'
 import { m } from '../../lib/messages'
 import { useLocale } from '@island.is/localization'
+import { allowance } from '../parentalLeaveUtils'
 
 interface YourRightsBoxChartProps {
   application: Application
@@ -14,6 +15,7 @@ const YourRightsBoxChart: FC<YourRightsBoxChartProps> = ({
   application,
   showDisclaimer = false,
 }) => {
+  console.log('-YourRightsBoxChart');
   const { formatMessage } = useLocale()
   const requestRightsAnswer = getValueViaPath(
     application.answers,
@@ -30,7 +32,7 @@ const YourRightsBoxChart: FC<YourRightsBoxChartProps> = ({
     requestRightsAnswer === 'yes'
       ? [
           {
-            label: () => ({ ...m.yourRightsInMonths, values: { months: '6' } }),
+            label: () => ({ ...m.yourRightsInMonths, values: { months: allowance.default.toString() } }),
             bulletStyle: 'blue',
           },
           {
@@ -42,14 +44,14 @@ const YourRightsBoxChart: FC<YourRightsBoxChartProps> = ({
           {
             label: () => ({
               ...m.yourRightsInMonths,
-              values: { months: giveRightsAnswer === 'yes' ? '5' : '6' },
+              values: { months: giveRightsAnswer === 'yes' ? allowance.min.toString() : allowance.default.toString() },
             }),
             bulletStyle: 'blue',
           },
         ]
 
   const numberOfBoxes =
-    requestRightsAnswer === 'yes' ? 7 : giveRightsAnswer === 'yes' ? 5 : 6
+    requestRightsAnswer === 'yes' ? allowance.max : giveRightsAnswer === 'yes' ? allowance.min : allowance.default
 
   return (
     <Box marginY={3} key={'YourRightsBoxChart'}>

@@ -1,12 +1,10 @@
 import React, { FC, useState } from 'react'
-import { FieldBaseProps, getValueViaPath } from '@island.is/application/core'
+import { FieldBaseProps, getValueViaPath, ValidAnswers } from '@island.is/application/core'
 import BoxChart, { BoxChartKey } from '../components/BoxChart'
 import { Box, Text } from '@island.is/island-ui/core'
 import { RadioController } from '@island.is/shared/form-fields'
 import { useLocale } from '@island.is/localization'
 import { m, mm } from '../../lib/messages'
-
-type ValidAnswers = 'yes' | 'no' | undefined
 
 const RequestRights: FC<FieldBaseProps> = ({ error, field, application }) => {
   const { formatMessage } = useLocale()

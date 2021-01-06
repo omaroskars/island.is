@@ -1,10 +1,11 @@
-import { Application, DataProviderResult } from '@island.is/application/core'
+import { Application, DataProviderResult, getValueViaPath, ValidAnswers } from '@island.is/application/core'
 import { theme } from '@island.is/island-ui/theme'
+import { NationalRegistryFamilyMember } from '@island.is/api/schema'
 
 import { TimelinePeriod } from './components/Timeline'
 import { Period } from '../types'
 import { ParentalLeave, PregnancyStatus } from '../dataProviders/APIDataTypes'
-import { NationalRegistryFamilyMember } from '@island.is/api/schema'
+import { YES } from '../constants'
 
 export function getExpectedDateOfBirth(
   application: Application,
@@ -83,3 +84,27 @@ export function formatPeriods(
  */
 export const formatIsk = (value: number): string =>
   value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') + ' kr.'
+
+// TODO: convert to days and merge with Noam's PR
+export const allowance = {
+  max: 7,
+  min: 5,
+  default: 6,
+}
+
+export const getAvailableRights = (application: Application) => {
+  const useFullPersonalAllowance = getValueViaPath(application.answers, 'usePersonalAllowance') as ValidAnswers === YES
+  const useFullPersonalAllowanceFromSpouse = getValueViaPath(application.answers, 'usePersonalAllowanceFromSpouse') as ValidAnswers === YES
+
+  if (useFullPersonalAllowance) {
+    return 6;
+  } else if (!useFullPersonalAllowance) {
+
+  }
+
+  return 6;
+}
+
+export const getUsedRights = () => {
+
+}

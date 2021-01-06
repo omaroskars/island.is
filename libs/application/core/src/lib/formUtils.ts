@@ -3,7 +3,7 @@
 // @ts-ignore
 const merge = require('deepmerge')
 
-import { Field } from '../types/Fields'
+import { Field, ValidAnswers } from '../types/Fields'
 import { Application, FormValue } from '../types/Application'
 import {
   Form,
@@ -212,3 +212,4 @@ export function extractRepeaterIndexFromField(field: Field): number {
   }
   return -1
 }
+
