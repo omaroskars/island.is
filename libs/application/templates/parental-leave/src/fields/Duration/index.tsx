@@ -22,7 +22,7 @@ const ParentalLeaveUsage: FC<FieldBaseProps> = ({ field, application }) => {
   const { id, props: { minMonths, maxMonths } } = field
   // console.log('-props', minMonths);
   const { clearErrors } = useFormContext()
-  const { formatMessage } = useLocale()
+  const { formatMessage, formatDateFns } = useLocale()
   const { answers } = application
   // console.log('-application', application);
   const expectedDateOfBirth = getExpectedDateOfBirth(application)
@@ -72,7 +72,7 @@ const ParentalLeaveUsage: FC<FieldBaseProps> = ({ field, application }) => {
         background="blue100"
         paddingTop={3}
         paddingX={3}
-        paddingBottom={10}
+        paddingBottom={3}
         marginTop={3}
       >
         <Box
@@ -130,6 +130,16 @@ const ParentalLeaveUsage: FC<FieldBaseProps> = ({ field, application }) => {
                 label={{
                   singular: formatMessage(m.month),
                   plural: formatMessage(m.months),
+                }}
+                rangeDates={{
+                  start: {
+                    date: formatDateFns(currentStartDateAnswer),
+                    message: formatMessage(m.rangeStartDate),
+                  },
+                  end: {
+                    date: formatDateFns(chosenEndDate),
+                    message: formatMessage(m.rangeEndDate),
+                  },
                 }}
                 currentIndex={chosenDuration}
                 onChange={(selectedMonths: number) => {
