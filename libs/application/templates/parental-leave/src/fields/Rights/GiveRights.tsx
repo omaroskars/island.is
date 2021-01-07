@@ -13,8 +13,6 @@ import { m, mm } from '../../lib/messages'
 import { defaultMonths } from '../../config'
 import { YES, NO } from '../../constants'
 
-type ValidAnswers = 'yes' | 'no' | undefined
-
 const GiveRights: FC<FieldBaseProps> = ({ error, field, application }) => {
   const currentAnswer = getValueViaPath(
     application.answers,

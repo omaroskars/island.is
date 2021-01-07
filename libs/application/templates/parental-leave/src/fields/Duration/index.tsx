@@ -17,18 +17,17 @@ import * as styles from './Duration.treat'
 import { getAvailableRights, getExpectedDateOfBirth } from '../parentalLeaveUtils'
 import { m, mm } from '../../lib/messages'
 import { useLocale } from '@island.is/localization'
+import { usageMaxMonths, usageMinMonths } from '../../config'
 
 const ParentalLeaveUsage: FC<FieldBaseProps> = ({ field, application }) => {
-  const { id, props: { minMonths, maxMonths } } = field
-  // console.log('-props', minMonths);
+  const { id } = field
   const { clearErrors } = useFormContext()
   const { formatMessage, formatDateFns } = useLocale()
   const { answers } = application
-  // console.log('-application', application);
+  console.log('-field', field);
+  console.log('-application', application);
   const expectedDateOfBirth = getExpectedDateOfBirth(application)
-  // console.log('-field', field);
   const currentRepeaterIndex = extractRepeaterIndexFromField(field)
-  // console.log('-currentRepeaterIndex', currentRepeaterIndex);
   const currentStartDateAnswer = getValueViaPath(
     answers,
     `periods[${
@@ -50,13 +49,15 @@ const ParentalLeaveUsage: FC<FieldBaseProps> = ({ field, application }) => {
   )
   const [chosenDuration, setChosenDuration] = useState<number>(monthsToUse)
   const [percent, setPercent] = useState<number>(100)
-  const rightsLeft = getAvailableRights(application)
+  const { days, months } = getAvailableRights(application)
+  console.log('-days', days);
+  // console.log('-months', months);
 
   useEffect(() => {
-    if (chosenDuration > rightsLeft) {
+    if (chosenDuration > months) {
       const newPercent = Math.min(
         100,
-        Math.round((rightsLeft / chosenDuration) * 100),
+        Math.round((months / chosenDuration) * 100),
       )
       setPercent(newPercent)
     } else {
@@ -117,8 +118,8 @@ const ParentalLeaveUsage: FC<FieldBaseProps> = ({ field, application }) => {
             name={id}
             render={({ onChange }) => (
               <Slider
-                min={minMonths}
-                max={maxMonths}
+                min={usageMinMonths}
+                max={usageMaxMonths}
                 trackStyle={{ gridTemplateRows: 8 }}
                 calculateCellStyle={() => {
                   return {

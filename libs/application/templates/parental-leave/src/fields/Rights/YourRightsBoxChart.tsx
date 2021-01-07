@@ -4,7 +4,7 @@ import { Box, Text } from '@island.is/island-ui/core'
 import { Application, getValueViaPath } from '@island.is/application/core'
 import { m } from '../../lib/messages'
 import { useLocale } from '@island.is/localization'
-import { maxDaysToGiveOrReceive, defaultMonths } from '../../config'
+import { maxDaysToGiveOrReceive, defaultMonths, minMonths, maxMonths } from '../../config'
 import { YES } from '../../constants'
 
 interface YourRightsBoxChartProps {
@@ -82,7 +82,7 @@ const YourRightsBoxChart: FC<YourRightsBoxChartProps> = ({
             label: () => ({
               ...yourRightsWithGivenDaysStringKey,
               values: {
-                months: defaultMonths - 1,
+                months: minMonths,
                 day: maxDays - giveDaysAnswer,
               },
             }),
@@ -110,7 +110,7 @@ const YourRightsBoxChart: FC<YourRightsBoxChartProps> = ({
   }
 
   const numberOfBoxes =
-    requestRightsAnswer === YES ? defaultMonths + 1 : defaultMonths
+    requestRightsAnswer === YES ? maxMonths : defaultMonths
 
   return (
     <Box marginY={3} key={'YourRightsBoxChart'}>
@@ -122,10 +122,10 @@ const YourRightsBoxChart: FC<YourRightsBoxChartProps> = ({
         })}
         boxes={numberOfBoxes}
         calculateBoxStyle={(index) => {
-          if (index === defaultMonths - 1 && giveRightsAnswer === YES) {
+          if (index === minMonths && giveRightsAnswer === YES) {
             return 'grayWithLines'
           }
-          if (index === defaultMonths && requestRightsAnswer === 'yes') {
+          if (index === defaultMonths && requestRightsAnswer === YES) {
             return 'greenWithLines'
           }
           return 'blue'

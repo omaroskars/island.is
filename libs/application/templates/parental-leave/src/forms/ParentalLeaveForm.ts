@@ -580,10 +580,6 @@ export const ParentalLeaveForm: Form = buildForm({
                 title: mm.duration.title,
                 component: 'ParentalLeaveDuration',
               },
-              {
-                minMonths: 1,
-                maxMonths: 18,
-              },
             ),
             buildMultiField({
               id: 'periods[0].ratio',

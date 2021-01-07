@@ -84,7 +84,7 @@ const GiveDaysSlider: FC<FieldBaseProps> = ({ field, application }) => {
         application={application}
         boxes={defaultMonths}
         calculateBoxStyle={(index) => {
-          if (index === defaultMonths - 1) {
+          if (index === minMonths) {
             return 'grayWithLines'
           }
           return 'blue'

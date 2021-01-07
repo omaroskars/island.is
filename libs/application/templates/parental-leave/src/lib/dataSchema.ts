@@ -2,14 +2,17 @@ import * as z from 'zod'
 import isValid from 'date-fns/isValid'
 import parseISO from 'date-fns/parseISO'
 import * as kennitala from 'kennitala'
-import { NO, YES } from '../constants'
 import { parsePhoneNumberFromString } from 'libphonenumber-js'
+
+import { NO, YES } from '../constants'
 
 const PersonalAllowance = z
   .object({
     usage: z
       .string()
-      .refine((x) => parseFloat(x) >= 0 && parseFloat(x) <= 100)
+      .refine((x) =>
+        parseFloat(x) >= 0 && parseFloat(x) <= 100
+      )
       .optional(),
     useAsMuchAsPossible: z.enum([YES, NO]).optional(),
   })

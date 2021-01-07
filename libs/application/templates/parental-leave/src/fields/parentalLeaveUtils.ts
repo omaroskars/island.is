@@ -6,6 +6,7 @@ import { TimelinePeriod } from './components/Timeline'
 import { Period } from '../types'
 import { ParentalLeave, PregnancyStatus } from '../dataProviders/APIDataTypes'
 import { YES } from '../constants'
+import { daysInMonth, defaultMonths } from '../config'
 
 export function getExpectedDateOfBirth(
   application: Application,
@@ -85,26 +86,40 @@ export function formatPeriods(
 export const formatIsk = (value: number): string =>
   value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') + ' kr.'
 
-// TODO: convert to days and merge with Noam's PR
-export const allowance = {
-  max: 7,
-  min: 5,
-  default: 6,
-}
-
 export const getAvailableRights = (application: Application) => {
+  console.log('-application', application);
+
+  /**
+   * if giverights is false
+   * if requestrights is false
+   * -> 6
+   *
+   */
+
+
   const useFullPersonalAllowance = getValueViaPath(application.answers, 'usePersonalAllowance') as ValidAnswers === YES
   const useFullPersonalAllowanceFromSpouse = getValueViaPath(application.answers, 'usePersonalAllowanceFromSpouse') as ValidAnswers === YES
 
   if (useFullPersonalAllowance) {
-    return 6;
+    return {
+      days: 0,
+      months: 6,
+    };
   } else if (!useFullPersonalAllowance) {
 
   }
 
-  return 6;
+  return {
+    days: 0,
+    months: 6,
+  };
 }
 
 export const getUsedRights = () => {
 
+}
+
+export const calculateTotalDaysAllowedForUser = (daysRequestedOrGiven: number) => {
+  // Should we instead pass the start date and end date, and do a `getDaysInMonth` over each month from the range?
+  return (defaultMonths * daysInMonth) + daysRequestedOrGiven
 }

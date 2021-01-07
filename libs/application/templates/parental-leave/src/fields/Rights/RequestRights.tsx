@@ -5,7 +5,7 @@ import { Box, Text } from '@island.is/island-ui/core'
 import { RadioController } from '@island.is/shared/form-fields'
 import { useLocale } from '@island.is/localization'
 import { m, mm } from '../../lib/messages'
-import { defaultMonths } from '../../config'
+import { defaultMonths, maxMonths } from '../../config'
 import { YES, NO } from '../../constants'
 
 const RequestRights: FC<FieldBaseProps> = ({ error, field, application }) => {
@@ -21,7 +21,7 @@ const RequestRights: FC<FieldBaseProps> = ({ error, field, application }) => {
   )
 
   const numberOfBoxes =
-    statefulAnswer === NO ? defaultMonths : defaultMonths + 1
+    statefulAnswer === NO ? defaultMonths : maxMonths
 
   const boxChartKeys: BoxChartKey[] = [
     {
