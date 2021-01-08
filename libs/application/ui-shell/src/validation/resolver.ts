@@ -17,6 +17,7 @@ export const resolver: Resolver<FormValue, ResolverContext> = (
   }
   const { dataSchema } = context
   const validationError = validateAnswers(dataSchema, formValue, false)
+  console.log('-validationError', validationError)
   if (validationError) {
     return { values: {}, errors: validationError }
   }

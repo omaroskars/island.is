@@ -16,19 +16,34 @@ const PersonalAllowance = z
   })
   .optional()
 
-const Period = z.object({
-  startDate: z.string().refine((d) => !isValid(parseISO(d)), 'error message?'),
-  endDate: z.string().refine((d) => isValid(parseISO(d))),
-  ratio: z.string().refine((val) => !isNaN(Number(val)) && parseInt(val) > 0 && parseInt(val) <= 100)
-})
-// .refine((rest) => {
-//   console.log('-rest', rest);
-//   if (rest.startDate) {
-//     return !isValid(parseISO(rest.startDate))
-//   }
+const Period = z
+  .object({
+    startDate: z.string(),
+    // startDate: z.string().refine((d) => isValid(parseISO(d))),
+    endDate: z.string(),
+    // endDate: z.string().refine((d) => isValid(parseISO(d))),
+    ratio: z.string(),
+    // ratio: z
+    //   .string()
+    //   .refine(
+    //     (val) =>
+    //       !isNaN(Number(val)) && parseInt(val) > 0 && parseInt(val) <= 100,
+    //   ),
+  })
+  .refine(
+    (data) => {
+      console.log('-data', data)
+      // if (rest.startDate) {
+      //   return !isValid(parseISO(rest.startDate))
+      // }
 
-//   return true
-// }, 'yo error')
+      return false
+    },
+    {
+      message: `You can't do that`,
+      path: ['ratio'],
+    },
+  )
 
 export const dataSchema = z.object({
   approveExternalData: z.boolean().refine((v) => v),

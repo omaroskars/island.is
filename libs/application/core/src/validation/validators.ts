@@ -1,6 +1,6 @@
 import { Schema } from '../types/Form'
 import { Answer, FormValue } from '../types/Application'
-import { ZodError } from 'zod'
+import { ZodError, ZodErrorCode, ZodErrorMap } from 'zod'
 
 interface SchemaValidationError {
   [key: string]: string
@@ -39,19 +39,34 @@ function partialSchemaValidation(
   Object.keys(answers).forEach((key) => {
     const newPath = constructPath(currentPath, key)
     const answer = answers[key]
+    console.log('-answer', answer)
 
     // ZodUnions do not have .pick method
     const trimmedSchema = originalSchema.pick
       ? originalSchema.pick({ [key]: true })
       : originalSchema
+
+    /**
+     * TODO: add .parse to enum for default error message
+     */
+
     if (typeof answer === 'object') {
       if (answer.length) {
         // answer is array
         const arrayElements = answer as Answer[]
+        console.log('-arrayElements', arrayElements)
+
         arrayElements.forEach((el, index) => {
           const elementPath = `${newPath}[${index}]`
+          console.log('-elementPath', elementPath)
+
           if (typeof el === 'object') {
             if (!isStrict && el !== null) {
+              console.log('-el', el)
+              console.log('-trimmedSchema', trimmedSchema)
+              // console.log('-error', error)
+              console.log('-isStrict', isStrict)
+
               error = partialSchemaValidation(
                 el as FormValue,
                 trimmedSchema?.shape[key]?._def?.type,
@@ -59,6 +74,8 @@ function partialSchemaValidation(
                 isStrict,
                 elementPath,
               )
+
+              console.log('-error 1', error)
             }
           } else {
             try {
@@ -77,6 +94,8 @@ function partialSchemaValidation(
           isStrict,
           newPath,
         )
+
+        console.log('-error 2', error)
       }
     } else {
       // answer is primitive
@@ -97,7 +116,16 @@ export function validateAnswers(
   isFullSchemaValidation?: boolean,
 ): SchemaValidationError | undefined {
   if (!isFullSchemaValidation) {
-    return partialSchemaValidation(answers, dataSchema, undefined, false, '')
+    const res = partialSchemaValidation(
+      answers,
+      dataSchema,
+      undefined,
+      false,
+      '',
+    )
+    console.log('-res', res)
+
+    return res
   }
 
   try {
@@ -105,5 +133,6 @@ export function validateAnswers(
   } catch (e) {
     return e
   }
+
   return undefined
 }

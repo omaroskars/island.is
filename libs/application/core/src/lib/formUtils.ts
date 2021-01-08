@@ -16,6 +16,10 @@ import {
   SubSection,
 } from '../types/Form'
 
+/**
+ * TODO
+ * allow to path path with [0] names
+ */
 export function getValueViaPath(
   obj: {},
   path: string,

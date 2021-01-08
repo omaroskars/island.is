@@ -23,7 +23,7 @@ const TextFormField: FC<Props> = ({
   field,
   showFieldName,
 }) => {
-  console.log('-error', error);
+  console.log('-error', error)
   const {
     id,
     disabled,

@@ -1,6 +1,6 @@
 import React, { FC, useState } from 'react'
 import { FieldBaseProps, getValueViaPath } from '@island.is/application/core'
-import { Box, Text } from '@island.is/island-ui/core'
+import { Box } from '@island.is/island-ui/core'
 import {
   FieldDescription,
   RadioController,
@@ -17,7 +17,6 @@ const FirstPeriodStart: FC<FieldBaseProps> = ({
   field,
   application,
 }) => {
-  console.log('-FirstPeriodStart');
   const { register } = useFormContext()
   const { formatMessage } = useLocale()
   const expectedDateOfBirth = getExpectedDateOfBirth(application)
@@ -34,15 +33,23 @@ const FirstPeriodStart: FC<FieldBaseProps> = ({
   const [statefulAnswer, setStatefulAnswer] = useState<ValidAnswers>(
     currentAnswer,
   )
+  console.log('-error', error)
+
+  /**
+   * TODO
+   * use a default message for "this field is required" for every fields?
+   * formatMessage(mm.errors.requiredAnswer)
+   */
 
   return (
     <Box marginY={3} key={field.id}>
       <FieldDescription
         description={formatMessage(mm.firstPeriodStart.description)}
       />
-      <Box paddingY={3} marginBottom={3}>
+      <Box paddingTop={3} marginBottom={3}>
         <RadioController
           id={field.id}
+          error={error}
           defaultValue={
             statefulAnswer !== undefined ? [statefulAnswer] : undefined
           }
@@ -65,6 +72,7 @@ const FirstPeriodStart: FC<FieldBaseProps> = ({
           onSelect={(newAnswer) => setStatefulAnswer(newAnswer as ValidAnswers)}
           largeButtons
         />
+
         <input
           type="hidden"
           value={
@@ -76,13 +84,6 @@ const FirstPeriodStart: FC<FieldBaseProps> = ({
           name="periods[0].startDate"
         />
       </Box>
-      {error && (
-        <Box color="red400" padding={2}>
-          <Text variant="default" color="red400">
-            {formatMessage(mm.errors.requiredAnswer)}
-          </Text>
-        </Box>
-      )}
     </Box>
   )
 }

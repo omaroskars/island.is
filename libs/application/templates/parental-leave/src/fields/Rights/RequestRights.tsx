@@ -41,6 +41,7 @@ const RequestRights: FC<FieldBaseProps> = ({ error, field, application }) => {
       <Box paddingY={3}>
         <RadioController
           id={field.id}
+          error={error}
           defaultValue={
             statefulAnswer !== undefined ? [statefulAnswer] : undefined
           }
@@ -54,11 +55,6 @@ const RequestRights: FC<FieldBaseProps> = ({ error, field, application }) => {
           largeButtons
         />
       </Box>
-      {error && (
-        <Box color="red400" padding={2}>
-          <Text color="red400">{formatMessage(mm.errors.requiredAnswer)}</Text>
-        </Box>
-      )}
 
       {/* No answer yet, so show them the last box as gray */}
       {!statefulAnswer && (

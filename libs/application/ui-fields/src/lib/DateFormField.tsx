@@ -15,8 +15,8 @@ interface Props extends FieldBaseProps {
   field: DateField
 }
 const DateFormField: FC<Props> = ({ application, error, field }) => {
-  console.log('-DateFormField');
-  console.log('-error', error);
+  console.log('-DateFormField')
+  console.log('-error', error)
   const { id, disabled, title, description, placeholder } = field
   const { formatMessage } = useLocale()
 

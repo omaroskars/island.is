@@ -15,7 +15,7 @@ const PeriodsRepeater: FC<RepeaterProps> = ({
   expandRepeater,
 }) => {
   const dob = getExpectedDateOfBirth(application)
-  console.log('-dob', dob);
+  console.log('-dob', dob)
 
   const { formatMessage } = useLocale()
 
