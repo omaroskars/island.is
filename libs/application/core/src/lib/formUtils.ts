@@ -212,4 +212,3 @@ export function extractRepeaterIndexFromField(field: Field): number {
   }
   return -1
 }
-

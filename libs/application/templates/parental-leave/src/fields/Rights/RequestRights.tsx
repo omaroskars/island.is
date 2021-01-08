@@ -1,5 +1,9 @@
 import React, { FC, useState } from 'react'
-import { FieldBaseProps, getValueViaPath, ValidAnswers } from '@island.is/application/core'
+import {
+  FieldBaseProps,
+  getValueViaPath,
+  ValidAnswers,
+} from '@island.is/application/core'
 import BoxChart, { BoxChartKey } from '../components/BoxChart'
 import { Box, Text } from '@island.is/island-ui/core'
 import { RadioController } from '@island.is/shared/form-fields'
@@ -20,8 +24,7 @@ const RequestRights: FC<FieldBaseProps> = ({ error, field, application }) => {
     currentAnswer,
   )
 
-  const numberOfBoxes =
-    statefulAnswer === NO ? defaultMonths : maxMonths
+  const numberOfBoxes = statefulAnswer === NO ? defaultMonths : maxMonths
 
   const boxChartKeys: BoxChartKey[] = [
     {

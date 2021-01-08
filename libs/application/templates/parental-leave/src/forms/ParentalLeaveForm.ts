@@ -18,13 +18,15 @@ import {
   Form,
   FormModes,
 } from '@island.is/application/core'
+import differenceInDays from 'date-fns/differenceInDays'
+
 import { m, mm } from '../lib/messages'
 import { formatIsk, getEstimatedMonthlyPay } from '../fields/parentalLeaveUtils'
 import { GetPensionFunds, GetUnions } from '../graphql/queries'
 import { NO, YES } from '../constants'
-
 import Logo from '../assets/Logo'
-import { defaultMonths } from '../config'
+import { defaultMonths, minPeriodDays } from '../config'
+import { Period } from '../types'
 
 interface SelectItem {
   id: string
@@ -573,18 +575,46 @@ export const ParentalLeaveForm: Form = buildForm({
                 }),
               ],
             }),
-            buildCustomField(
-              {
-                id: 'periods[0].endDate',
-                condition: (formValue) => formValue.confirmLeaveDuration === 'duration',
-                title: mm.duration.title,
-                component: 'ParentalLeaveDuration',
-              },
-            ),
+            buildCustomField({
+              id: 'periods[0].endDate',
+              condition: (formValue) =>
+                formValue.confirmLeaveDuration === 'duration',
+              title: mm.duration.title,
+              component: 'ParentalLeaveDuration',
+            }),
             buildMultiField({
               id: 'periods[0].ratio',
               title: mm.ratio.title,
               description: mm.ratio.description,
+              /*
+              condition: (formValue) => {
+                console.log('-formValue', formValue)
+
+                // TODO loop through
+                const periods = formValue.periods as Period[]
+                const ratio = periods?.[0]?.ratio
+                const startDate = periods?.[0]?.startDate
+                console.log('-startDate', startDate)
+                const endDate = periods?.[0]?.endDate
+                console.log('-endDate', endDate)
+
+                if (!startDate || !endDate) {
+                  return true
+                }
+
+                const diff = differenceInDays(
+                  new Date(startDate),
+                  new Date(endDate),
+                )
+
+                if (diff < minPeriodDays) {
+                  ;`The minimum is ${minPeriodDays} days of leave, you've chosen ${diff} days at ${ratio}% which ends up as only 7 days leave.`
+                  return false
+                }
+
+                return true
+              },
+              */
               children: [
                 buildSelectField({
                   id: 'periods[0].ratio',

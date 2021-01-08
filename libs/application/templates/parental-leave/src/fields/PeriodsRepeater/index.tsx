@@ -15,10 +15,14 @@ const PeriodsRepeater: FC<RepeaterProps> = ({
   expandRepeater,
 }) => {
   const dob = getExpectedDateOfBirth(application)
+  console.log('-dob', dob);
+
   const { formatMessage } = useLocale()
+
   if (!dob) {
     return null
   }
+
   const dobDate = new Date(dob)
 
   // TODO this will also come from somewhere in the external data

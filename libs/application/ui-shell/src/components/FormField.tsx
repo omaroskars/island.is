@@ -16,7 +16,7 @@ const FormField: FC<{
   errors: object
   goToScreen: (id: string) => void
 }> = ({ application, autoFocus, errors, field, goToScreen, showFieldName }) => {
-  console.log('-field id', field.id);
+  console.log('-field id', field.id)
 
   const [allFields] = useFields()
   if (!field.isNavigable) {

@@ -1,11 +1,16 @@
-import { Application, DataProviderResult, getValueViaPath, ValidAnswers } from '@island.is/application/core'
+import {
+  Application,
+  DataProviderResult,
+  getValueViaPath,
+  ValidAnswers,
+} from '@island.is/application/core'
 import { theme } from '@island.is/island-ui/theme'
 import { NationalRegistryFamilyMember } from '@island.is/api/schema'
 
 import { TimelinePeriod } from './components/Timeline'
 import { Period } from '../types'
 import { ParentalLeave, PregnancyStatus } from '../dataProviders/APIDataTypes'
-import { YES } from '../constants'
+import { NO, YES } from '../constants'
 import { daysInMonth, defaultMonths } from '../config'
 
 export function getExpectedDateOfBirth(
@@ -81,45 +86,44 @@ export function formatPeriods(
 
 /*
  *  Takes in a number (ex: 119000) and
- *  returns a formated ISK value "119.000 kr."
+ *  returns a formatted ISK value "119.000 kr."
  */
 export const formatIsk = (value: number): string =>
   value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') + ' kr.'
 
+/**
+ * Uses `daysInMonth`: 30 as the number of days in a month on average
+ */
+const daysToMonths = (n: number) => n / daysInMonth
+
+/**
+ * Returns the maximum number of months available for the applicant.
+ * Returns as well the days given or requested by the applicant.
+ */
 export const getAvailableRights = (application: Application) => {
-  console.log('-application', application);
+  const requestRights = getValueViaPath(
+    application.answers,
+    'requestRights',
+  ) as any
+  const giveRights = getValueViaPath(application.answers, 'giveRights') as any
 
-  /**
-   * if giverights is false
-   * if requestrights is false
-   * -> 6
-   *
-   */
+  let requestedDays = 0
+  let givenDays = 0
+  let months = defaultMonths
 
+  if (requestRights?.isRequestingRights === YES) {
+    requestedDays = requestRights.requestDays
+    months = months + daysToMonths(requestedDays)
+  }
 
-  const useFullPersonalAllowance = getValueViaPath(application.answers, 'usePersonalAllowance') as ValidAnswers === YES
-  const useFullPersonalAllowanceFromSpouse = getValueViaPath(application.answers, 'usePersonalAllowanceFromSpouse') as ValidAnswers === YES
-
-  if (useFullPersonalAllowance) {
-    return {
-      days: 0,
-      months: 6,
-    };
-  } else if (!useFullPersonalAllowance) {
-
+  if (giveRights?.isGivingRights === YES) {
+    givenDays = giveRights.giveDays
+    months = months + daysToMonths(givenDays)
   }
 
   return {
-    days: 0,
-    months: 6,
-  };
-}
-
-export const getUsedRights = () => {
-
-}
-
-export const calculateTotalDaysAllowedForUser = (daysRequestedOrGiven: number) => {
-  // Should we instead pass the start date and end date, and do a `getDaysInMonth` over each month from the range?
-  return (defaultMonths * daysInMonth) + daysRequestedOrGiven
+    requestedDays,
+    givenDays,
+    months: Number(months.toFixed(1)), // TODO: do we want to truncate decimals?
+  }
 }

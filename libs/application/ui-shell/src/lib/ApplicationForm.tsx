@@ -34,7 +34,7 @@ const ApplicationLoader: FC<{
   })
 
   const application = data?.getApplication
-  console.log('-application', application);
+  console.log('-application', application)
 
   if (!applicationId || error) {
     return <NotFound />

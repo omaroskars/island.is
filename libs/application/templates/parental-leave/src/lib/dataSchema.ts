@@ -10,23 +10,25 @@ const PersonalAllowance = z
   .object({
     usage: z
       .string()
-      .refine((x) =>
-        parseFloat(x) >= 0 && parseFloat(x) <= 100
-      )
+      .refine((x) => parseFloat(x) >= 0 && parseFloat(x) <= 100)
       .optional(),
     useAsMuchAsPossible: z.enum([YES, NO]).optional(),
   })
   .optional()
 
 const Period = z.object({
-  startDate: z.string().refine((d) => isValid(parseISO(d))),
+  startDate: z.string().refine((d) => !isValid(parseISO(d)), 'error message?'),
   endDate: z.string().refine((d) => isValid(parseISO(d))),
-  ratio: z
-    .string()
-    .refine(
-      (val) => !isNaN(Number(val)) && parseInt(val) > 0 && parseInt(val) <= 100,
-    ),
+  ratio: z.string().refine((val) => !isNaN(Number(val)) && parseInt(val) > 0 && parseInt(val) <= 100)
 })
+// .refine((rest) => {
+//   console.log('-rest', rest);
+//   if (rest.startDate) {
+//     return !isValid(parseISO(rest.startDate))
+//   }
+
+//   return true
+// }, 'yo error')
 
 export const dataSchema = z.object({
   approveExternalData: z.boolean().refine((v) => v),

@@ -14,18 +14,27 @@ import { theme } from '@island.is/island-ui/theme'
 import { FieldDescription } from '@island.is/shared/form-fields'
 import Slider from '../components/Slider'
 import * as styles from './Duration.treat'
-import { getAvailableRights, getExpectedDateOfBirth } from '../parentalLeaveUtils'
+import {
+  getAvailableRights,
+  getExpectedDateOfBirth,
+} from '../parentalLeaveUtils'
 import { m, mm } from '../../lib/messages'
 import { useLocale } from '@island.is/localization'
 import { usageMaxMonths, usageMinMonths } from '../../config'
 
-const ParentalLeaveUsage: FC<FieldBaseProps> = ({ field, application }) => {
+const ParentalLeaveUsage: FC<FieldBaseProps> = ({
+  error,
+  field,
+  application,
+}) => {
+  console.log('-error', error)
+
   const { id } = field
   const { clearErrors } = useFormContext()
   const { formatMessage, formatDateFns } = useLocale()
   const { answers } = application
-  console.log('-field', field);
-  console.log('-application', application);
+  console.log('-field', field)
+  console.log('-application', application)
   const expectedDateOfBirth = getExpectedDateOfBirth(application)
   const currentRepeaterIndex = extractRepeaterIndexFromField(field)
   const currentStartDateAnswer = getValueViaPath(
@@ -49,9 +58,8 @@ const ParentalLeaveUsage: FC<FieldBaseProps> = ({ field, application }) => {
   )
   const [chosenDuration, setChosenDuration] = useState<number>(monthsToUse)
   const [percent, setPercent] = useState<number>(100)
-  const { days, months } = getAvailableRights(application)
-  console.log('-days', days);
-  // console.log('-months', months);
+  const { months } = getAvailableRights(application)
+  console.log('-months', months)
 
   useEffect(() => {
     if (chosenDuration > months) {

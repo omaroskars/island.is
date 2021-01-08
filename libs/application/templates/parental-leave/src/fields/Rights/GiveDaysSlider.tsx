@@ -10,7 +10,6 @@ import BoxChart, { BoxChartKey } from '../components/BoxChart'
 import { maxDaysToGiveOrReceive, defaultMonths, minMonths } from '../../config'
 
 const GiveDaysSlider: FC<FieldBaseProps> = ({ field, application }) => {
-  const maxDays = maxDaysToGiveOrReceive
   const { id } = field
   const { formatMessage } = useLocale()
   const currentAnswer = getValueViaPath(
@@ -18,15 +17,12 @@ const GiveDaysSlider: FC<FieldBaseProps> = ({ field, application }) => {
     field.id,
     1,
   ) as number
-
   const { clearErrors } = useFormContext()
-
   const [chosenGiveDays, setChosenGiveDays] = useState<number>(currentAnswer)
-
   const daysStringKey = chosenGiveDays > 1 ? m.giveRightsDays : m.giveRightsDay
 
   const yourRightsWithGivenDaysStringKey =
-    maxDays - chosenGiveDays === 1
+    maxDaysToGiveOrReceive - chosenGiveDays === 1
       ? m.yourRightsInMonthsAndDay
       : m.yourRightsInMonthsAndDays
 
@@ -34,7 +30,10 @@ const GiveDaysSlider: FC<FieldBaseProps> = ({ field, application }) => {
     {
       label: () => ({
         ...yourRightsWithGivenDaysStringKey,
-        values: { months: minMonths, day: maxDays - chosenGiveDays },
+        values: {
+          months: minMonths,
+          day: maxDaysToGiveOrReceive - chosenGiveDays,
+        },
       }),
       bulletStyle: 'blue',
     },
@@ -60,7 +59,7 @@ const GiveDaysSlider: FC<FieldBaseProps> = ({ field, application }) => {
                 plural: formatMessage(m.days),
               }}
               min={1}
-              max={maxDays}
+              max={maxDaysToGiveOrReceive}
               step={1}
               currentIndex={value || chosenGiveDays}
               showMinMaxLabels

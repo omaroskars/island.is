@@ -17,6 +17,7 @@ const FirstPeriodStart: FC<FieldBaseProps> = ({
   field,
   application,
 }) => {
+  console.log('-FirstPeriodStart');
   const { register } = useFormContext()
   const { formatMessage } = useLocale()
   const expectedDateOfBirth = getExpectedDateOfBirth(application)

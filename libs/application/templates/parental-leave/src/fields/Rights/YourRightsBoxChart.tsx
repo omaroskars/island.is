@@ -4,7 +4,12 @@ import { Box, Text } from '@island.is/island-ui/core'
 import { Application, getValueViaPath } from '@island.is/application/core'
 import { m } from '../../lib/messages'
 import { useLocale } from '@island.is/localization'
-import { maxDaysToGiveOrReceive, defaultMonths, minMonths, maxMonths } from '../../config'
+import {
+  maxDaysToGiveOrReceive,
+  defaultMonths,
+  minMonths,
+  maxMonths,
+} from '../../config'
 import { YES } from '../../constants'
 
 interface YourRightsBoxChartProps {
@@ -16,7 +21,7 @@ const YourRightsBoxChart: FC<YourRightsBoxChartProps> = ({
   application,
   showDisclaimer = false,
 }) => {
-  console.log('-YourRightsBoxChart');
+  console.log('-YourRightsBoxChart')
   const { formatMessage } = useLocale()
 
   const maxDays = maxDaysToGiveOrReceive
@@ -109,8 +114,7 @@ const YourRightsBoxChart: FC<YourRightsBoxChartProps> = ({
     })
   }
 
-  const numberOfBoxes =
-    requestRightsAnswer === YES ? maxMonths : defaultMonths
+  const numberOfBoxes = requestRightsAnswer === YES ? maxMonths : defaultMonths
 
   return (
     <Box marginY={3} key={'YourRightsBoxChart'}>
