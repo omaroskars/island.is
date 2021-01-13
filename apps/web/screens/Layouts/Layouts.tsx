@@ -4,6 +4,7 @@ import {
   GridContainer,
   GridRow,
   GridColumn,
+  ResponsiveSpace
 } from '@island.is/island-ui/core'
 import { Main, Sticky } from '../../components'
 
@@ -34,16 +35,22 @@ export const ArticleLayout: FC<ArticleProps> = ({ sidebar, children }) => (
 interface SubpageProps {
   main: ReactNode
   details?: ReactNode
+  paddingTop?: ResponsiveSpace
+  mainPaddingBottom?: ResponsiveSpace
 }
 
-export const SubpageLayout: FC<SubpageProps> = ({ main, details }) => {
+export const SubpageLayout: FC<SubpageProps> = ({ 
+  main, 
+  details,
+  paddingTop,
+  mainPaddingBottom, }) => {
   return (
-    <Box width="full" paddingTop={10}>
-      <Box paddingBottom={6}>
+    <Box width="full" paddingTop={paddingTop}>
+      <Box paddingBottom={mainPaddingBottom}>
         <GridContainer>{main}</GridContainer>
       </Box>
       {details && (
-        <Box background="blue100" paddingTop={4}>
+        <Box background="blue100" paddingTop={5}>
           <GridContainer>{details}</GridContainer>
         </Box>
       )}

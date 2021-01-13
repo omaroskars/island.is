@@ -235,6 +235,7 @@ const ApiCatalogue: Screen<ApiCatalogueProps> = ({
 
   return (
     <SubpageLayout
+      mainPaddingBottom={[0, 0, 3]}
       main={
         <SidebarLayout
           sidebarContent={
