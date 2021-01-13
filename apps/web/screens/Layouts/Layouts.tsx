@@ -4,7 +4,7 @@ import {
   GridContainer,
   GridRow,
   GridColumn,
-  ResponsiveSpace
+  ResponsiveSpace,
 } from '@island.is/island-ui/core'
 import { Main, Sticky } from '../../components'
 
@@ -39,11 +39,12 @@ interface SubpageProps {
   mainPaddingBottom?: ResponsiveSpace
 }
 
-export const SubpageLayout: FC<SubpageProps> = ({ 
-  main, 
+export const SubpageLayout: FC<SubpageProps> = ({
+  main,
   details,
   paddingTop,
-  mainPaddingBottom, }) => {
+  mainPaddingBottom,
+}) => {
   return (
     <Box width="full" paddingTop={paddingTop}>
       <Box paddingBottom={mainPaddingBottom}>

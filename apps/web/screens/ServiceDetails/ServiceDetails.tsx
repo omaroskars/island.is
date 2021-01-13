@@ -87,7 +87,7 @@ const ServiceDetails: Screen<ServiceDetailsProps> = ({
 
   return (
     <SubpageLayout
-    mainPaddingBottom={[0, 0, 3]}
+      mainPaddingBottom={[0, 0, 3]}
       main={
         <SidebarLayout
           sidebarContent={
