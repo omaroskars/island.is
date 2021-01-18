@@ -29,6 +29,9 @@ module.exports = withTreat(
       graphqlEndpoint: `${API_PATH}${graphqlPath}`,
       SENTRY_DSN,
     },
+    env: {
+      API_MOCKS: process.env.API_MOCKS,
+    },
     basePath: '/skilavottord',
     async redirects() {
       return [

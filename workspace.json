@@ -331,8 +331,12 @@
         "e2e-ci": {
           "builder": "@nrwl/workspace:run-commands",
           "options": {
-            "args": "--targetName=air-discount-scheme-web --targetHost=http://localhost:4200",
-            "command": "yarn start-test 'yarn start {args.targetName}' {args.targetHost} \"yarn run e2e  {args.targetName}-e2e --headless --production --base-url {args.targetHost} --devServerTarget ''\""
+            "args": "--targetName=air-discount-scheme-web",
+            "commands": [
+              "yarn nx run {args.targetName}:build:production",
+              "yarn nx run {args.targetName}-e2e:e2e:production --headless --production --base-url http://localhost:4200 --record --group={args.targetName}-e2e"
+            ],
+            "parallel": false
           }
         },
         "lint": {
@@ -1409,11 +1413,16 @@
             }
           }
         },
-        "e2e-ci": {
+        "static-serve": {
           "builder": "@nrwl/workspace:run-commands",
           "options": {
-            "args": "--targetName=application-system-form --targetHost=http://localhost:4200",
-            "command": "yarn start-test 'yarn start {args.targetName}' {args.targetHost} \"yarn run e2e  {args.targetName}-e2e --headless --production --base-url {args.targetHost} --devServerTarget ''\""
+            "commands": [
+              {
+                "command": "yarn serve -l 4200 -s dist/apps/application-system/form",
+                "forwardAllArgs": false
+              }
+            ],
+            "readyWhen": "Accepting connections"
           }
         },
         "lint": {
@@ -1460,8 +1469,19 @@
           },
           "configurations": {
             "production": {
-              "devServerTarget": "application-system-form:serve:production"
+              "devServerTarget": "application-system-form:static-serve"
             }
+          }
+        },
+        "e2e-ci": {
+          "builder": "@nrwl/workspace:run-commands",
+          "options": {
+            "args": "--targetName=application-system-form",
+            "commands": [
+              "yarn nx run {args.targetName}:build:production",
+              "yarn nx run {args.targetName}-e2e:e2e:production --headless --production --base-url http://localhost:4200 --record --group={args.targetName}-e2e"
+            ],
+            "parallel": false
           }
         },
         "lint": {
@@ -2614,8 +2634,12 @@
         "e2e-ci": {
           "builder": "@nrwl/workspace:run-commands",
           "options": {
-            "args": "--targetName=gjafakort-web --targetHost=http://localhost:4200",
-            "command": "yarn start-test 'yarn start {args.targetName}' {args.targetHost} \"yarn run e2e  {args.targetName}-e2e --headless --production --base-url {args.targetHost} --devServerTarget ''\""
+            "args": "--targetName=gjafakort-web",
+            "commands": [
+              "yarn nx run {args.targetName}:build:production",
+              "yarn nx run {args.targetName}-e2e:e2e:production --headless --production --base-url http://localhost:4200 --record --group={args.targetName}-e2e"
+            ],
+            "parallel": false
           }
         },
         "lint": {
@@ -3279,11 +3303,16 @@
             }
           }
         },
-        "e2e-ci": {
+        "static-serve": {
           "builder": "@nrwl/workspace:run-commands",
           "options": {
-            "args": "--targetName=judicial-system-web --targetHost=http://localhost:4200",
-            "command": "yarn start-test 'yarn start {args.targetName}' {args.targetHost} \"yarn run e2e  {args.targetName}-e2e --headless --production --base-url {args.targetHost} --devServerTarget ''\""
+            "commands": [
+              {
+                "command": "yarn serve -l 4200 -s dist/apps/judicial-system/web",
+                "forwardAllArgs": false
+              }
+            ],
+            "readyWhen": "Accepting connections"
           }
         },
         "lint": {
@@ -3321,8 +3350,19 @@
           },
           "configurations": {
             "production": {
-              "devServerTarget": "judicial-system-web:serve:production"
+              "devServerTarget": "judicial-system-web:static-serve"
             }
+          }
+        },
+        "e2e-ci": {
+          "builder": "@nrwl/workspace:run-commands",
+          "options": {
+            "args": "--targetName=judicial-system-web",
+            "commands": [
+              "yarn nx run {args.targetName}:build:production",
+              "yarn nx run {args.targetName}-e2e:e2e:production --headless --production --base-url http://localhost:4200 --record --group={args.targetName}-e2e"
+            ],
+            "parallel": false
           }
         },
         "lint": {
@@ -3680,6 +3720,18 @@
             }
           }
         },
+        "static-serve": {
+          "builder": "@nrwl/workspace:run-commands",
+          "options": {
+            "commands": [
+              {
+                "command": "yarn serve -l 4200 -s dist/apps/service-portal",
+                "forwardAllArgs": false
+              }
+            ],
+            "readyWhen": "Accepting connections"
+          }
+        },
         "lint": {
           "builder": "@nrwl/linter:lint",
           "options": {
@@ -3950,15 +4002,19 @@
           },
           "configurations": {
             "production": {
-              "devServerTarget": "service-portal:serve:production"
+              "devServerTarget": "service-portal:static-serve"
             }
           }
         },
         "e2e-ci": {
           "builder": "@nrwl/workspace:run-commands",
           "options": {
-            "args": "--targetName=service-portal --targetHost=http://localhost:4200",
-            "command": "yarn start-test 'yarn start {args.targetName}' {args.targetHost} \"yarn run e2e  {args.targetName}-e2e --headless --production --base-url {args.targetHost} --devServerTarget ''\""
+            "args": "--targetName=service-portal",
+            "commands": [
+              "yarn nx run {args.targetName}:build:production",
+              "yarn nx run {args.targetName}-e2e:e2e:production --headless --production --base-url http://localhost:4200 --record --group={args.targetName}-e2e"
+            ],
+            "parallel": false
           }
         },
         "lint": {
@@ -4895,8 +4951,12 @@
         "e2e-ci": {
           "builder": "@nrwl/workspace:run-commands",
           "options": {
-            "args": "--targetName=skilavottord-web --targetHost=http://localhost:4200",
-            "command": "yarn start-test 'yarn start {args.targetName}' {args.targetHost}/skilavottord/my-cars \"yarn run e2e  {args.targetName}-e2e --headless --production --base-url {args.targetHost} --devServerTarget ''\""
+            "args": "--targetName=skilavottord-web",
+            "commands": [
+              "yarn nx run {args.targetName}:build:production",
+              "yarn nx run {args.targetName}-e2e:e2e:production --headless --production --base-url http://localhost:4200 --record --group={args.targetName}-e2e"
+            ],
+            "parallel": false
           }
         },
         "lint": {
@@ -5106,8 +5166,12 @@
         "e2e-ci": {
           "builder": "@nrwl/workspace:run-commands",
           "options": {
-            "args": "--targetName=web --targetHost=http://localhost:4200",
-            "command": "yarn start-test 'yarn start {args.targetName}' {args.targetHost} \"yarn run e2e  {args.targetName}-e2e --headless --production --base-url {args.targetHost} --devServerTarget ''\""
+            "args": "--targetName=web",
+            "commands": [
+              "yarn nx run {args.targetName}:build:production",
+              "yarn nx run {args.targetName}-e2e:e2e:production --headless --production --base-url http://localhost:4200 --record --group={args.targetName}-e2e"
+            ],
+            "parallel": false
           }
         },
         "lint": {
