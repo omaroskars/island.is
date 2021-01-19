@@ -72,13 +72,6 @@ export const HealthInsuranceForm: Form = buildForm({
               id: 'errorModal',
               component: 'ErrorModal',
               title: '',
-              condition: (answers, externalData) => {
-                const previousCountry = (externalData.nationalRegistry
-                  ?.data as {
-                  previousCountry?: string
-                })?.previousCountry
-                return previousCountry ? !isValidCountry(previousCountry) : true
-              },
             }),
             buildDividerField({
               title: ' ',
