@@ -46,5 +46,3 @@ migrateBootstrap().catch((error) => {
   // take down container on error to prevent this search indexer from going live
   throw error
 })
-
-// TODO: Add config to helm
