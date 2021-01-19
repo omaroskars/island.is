@@ -1,65 +1,15 @@
-import yargs from 'yargs'
 import { logger } from '@island.is/logging'
 import { environment } from '../environments/environment'
-import * as aws from './aws'
-import * as dictionary from './dictionary'
-import * as elastic from './elastic'
-import * as kibana from './kibana'
+import * as aws from './lib/aws'
+import * as dictionary from './lib/dictionary'
+import * as elastic from './lib/elastic'
 import * as indexManager from '@island.is/content-search-index-manager'
 
 const { locales } = environment
 
 class App {
-  async run() {
-    logger.info('Starting migration of dictionaries and ES config', environment)
-
+  public async run(): Promise<boolean> {
     const hasAwsAccess = await aws.checkAWSAccess()
-
-    if (hasAwsAccess) {
-      await this.migrateAws()
-    }
-
-    await this.migrateES(hasAwsAccess)
-
-    try {
-      await this.migrateKibana()
-    } catch (e) {
-      logger.error('Failed migrating kibana', e)
-    }
-
-    logger.info('Done!')
-  }
-
-  private async migrateAws(): Promise<boolean> {
-    logger.info('Starting aws migration')
-
-    /*
-    we want to get packages after a given version (github sha)
-    this allows us to upload all versions since last sync
-    */
-    const dictionaryVersions = dictionary.getDictionaryVersions() // returns versions of the dictionary in order with the newest version first
-    const latestAwsDictionaryVersion = await aws.getFirstFoundAwsEsPackageVersion(
-      dictionaryVersions,
-    )
-    const newDictionaryFiles = await dictionary.getDictionaryFilesAfterVersion(
-      latestAwsDictionaryVersion,
-    )
-
-    // if we have packages we should add them (s3 -> AWS ES -> AWS ES search domain)
-    if (newDictionaryFiles.length) {
-      logger.info('Found new dictionary packages, uploading to AWS', {
-        packages: newDictionaryFiles,
-      })
-      const s3Files = await aws.uploadS3DictionaryFiles(newDictionaryFiles) // upload repo files to s3
-      const newEsPackages = await aws.createAwsEsPackages(s3Files) // create the dictionary packages files in AWS ES
-      await aws.associatePackagesWithAwsEsSearchDomain(newEsPackages) // attach the new packages to our AWS ES search domain
-    }
-
-    logger.info('Aws migration completed')
-    return true
-  }
-
-  private async migrateES(hasAwsAccess: boolean): Promise<boolean> {
     logger.info('Starting elasticsearch migration')
 
     // get dictionary AWS ES packages
@@ -153,29 +103,11 @@ class App {
     logger.info('Elasticsearch migration completed')
     return true
   }
-
-  private async migrateKibana() {
-    logger.info('Starting kibana migration')
-    const version = indexManager.getElasticVersion()
-    await kibana.importObjects(version)
-    logger.info('Done')
-  }
-
-  async syncKibana() {
-    logger.info('Starting kibana syncing')
-    await kibana.syncObjects()
-    logger.info('Done')
-  }
 }
 
 async function migrateBootstrap() {
-  const argv = yargs(process.argv).argv
   const app = new App()
-  if (argv.syncKibana) {
-    await app.syncKibana()
-  } else {
-    await app.run()
-  }
+  await app.run()
 }
 
 migrateBootstrap().catch((error) => {

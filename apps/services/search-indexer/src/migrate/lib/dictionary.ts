@@ -1,5 +1,5 @@
 import fetch from 'node-fetch'
-import { environment } from '../environments/environment'
+import { environment } from '../../environments/environment'
 import { logger } from '@island.is/logging'
 import flatten from 'lodash/flatten'
 import { AwsEsPackage } from './aws'

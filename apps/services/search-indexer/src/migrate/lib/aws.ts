@@ -1,7 +1,7 @@
 import { logger } from '@island.is/logging'
 import AWS from 'aws-sdk'
 import { PutObjectRequest } from 'aws-sdk/clients/s3'
-import { environment } from '../environments/environment'
+import { environment } from '../../environments/environment'
 import { Dictionary } from './dictionary'
 import { PackageStatus, DomainPackageStatus } from 'aws-sdk/clients/es'
 import { ElasticsearchIndexLocale } from '@island.is/content-search-index-manager'
